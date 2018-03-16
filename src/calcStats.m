@@ -14,12 +14,9 @@ function [ hv, p ] = calcStats( out_features, out_targets, param )
     
     % for all channels and time intervals
     for i = 1: size(targetf, 2)
-        % for all trials
-        for j = 1: size(targetf, 1)
-            diffs(1, j) = targetf(j, i) - nontargetf(j, i);
-        end
         
-         [hv(i), p(i)] = ttest(diffs, 0, param.alpha); % test each channel and time interval separately
+         % 2 - sample t-test
+         [hv(i), p(i)] = ttest2(targetf(:, i), nontargetf(:, i), param.alpha); % test each channel and time interval separately
     end
     
     % plot results, highlight statistical significant intervals

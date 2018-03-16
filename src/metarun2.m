@@ -3,7 +3,7 @@
 param = config();
 clear globalresults;
 param.randomizer = rng(10, 'simdTwister'); % for reproducibility
-maxiter = 2;    
+maxiter = 1;    
 accuracies = zeros(maxiter, length(param.classifiers));
 precisions = zeros(maxiter, length(param.classifiers));
 recalls    = zeros(maxiter, length(param.classifiers));
