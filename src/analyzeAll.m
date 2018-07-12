@@ -1,10 +1,10 @@
 % Main script to run. It analyzes datasets defined by base_dir, conditions
 % and number_of_participants parameters.
 close all;
-clearvars averages;
+%clearvars averages;
 base_dir = 'E:\eeg_data\Anonymize\'; % directory that contains training and testing data
 
-param = config();
+param = configParam();
 
 train_dirs    = {[base_dir, '95\Data\'];   [base_dir, '96\Data\'];    [base_dir, '99\Data\'];   [base_dir, '100\Data\'];    [base_dir, '102\Data\'];   [base_dir, '104\Data\'];   [base_dir, '105\Data\'];   [base_dir, '106\Data\']};
 train_files   = { 'LED_04_06_2012_95.vhdr';  'LED_04_06_2012_96.vhdr';  'LED_05_06_2012_99.vhdr'; 'LED_05_06_2012_100.vhdr';  'LED_06_06_2012_102.vhdr'; 'LED_28_06_2012_104.vhdr'; 'LED_28_06_2012_105.vhdr'; 'LED_28_06_2012_106.vhdr'};
@@ -52,7 +52,7 @@ allresults.y.real = [];
 
 for i = 1:length(test_files) % iterate over participants
     % testing
-    [results, global_results, test_out_features, test_out_targets] = runTesting( test_dirs{i}, test_files{i}, bestmodels, param);
+    [results, global_results, test_out_features, test_out_targets, param] = runTesting( test_dirs{i}, test_files{i}, bestmodels, param);
     testing_data.(['features_', test_files{i}(end-6:end-5)]) = test_out_features;
     testing_data.([ 'targets_', test_files{i}(end-6:end-5)]) = test_out_targets;
     

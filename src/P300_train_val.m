@@ -34,7 +34,7 @@ function [results, models] = P300_train_val(out_features, out_targets, param);
     [models.som1, results.train_times.som1]  =  train_som1_classifier(outf_train', outt_train(:, 1)', param);
     [models.som2, results.train_times.som2]  =  train_som2_classifier(outf_train', outt_train(:, 1)', param);
     [models.lasso, results.train_times.lasso] =  train_lasso_classifier(outf_train', outt_train(:, 1)', param);
-    [models.sfam, results.train_times.sfam]  =  trainfsnet(outf_train', outt_train(:, 1)', param);
+   % [models.sfam, results.train_times.sfam]  =  trainfsnet(outf_train', outt_train(:, 1)', param);
 
 
     % test the models
@@ -44,7 +44,7 @@ function [results, models] = P300_train_val(out_features, out_targets, param);
     results.som1  = test_som1_classifier(outf_val', outt_val(:, 1)', models.som1);
     results.som2  = test_som2_classifier(outf_val', outt_val(:, 1)', models.som2);
     results.lasso = test_lasso_classifier2(outf_val', outt_val(:, 1)', models.lasso, param);
-    results.sfam  = testfsnet(outf_val', outt_val(:, 1)', models.sfam);
+ %   results.sfam  = testfsnet(outf_val', outt_val(:, 1)', models.sfam);
     results.yreal = (outt_val(:, 1)' == 1);
 end
     

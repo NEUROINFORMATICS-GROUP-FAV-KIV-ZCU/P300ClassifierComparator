@@ -7,19 +7,18 @@
 % see create_feature_vector for explanation
 %
 % Outputs
-% averages - averaged epoched EEG features
-% EEG      - original EEG EEGLAB data
+% averages     - averaged epoched EEG features
+% EEG_out      - extracted epochs ready to single trial analysis
 % ------------------------------------------------
-function [averages, EEG] = eeglab_process(source_directory, source_file_name, param, markers, phase);
+function [averages, EEG_out] = eeglab_process(source_directory, source_file_name, param, markers, phase);
 
 
-    if isempty(strfind(source_file_name, '.set'))
+    if ~contains(source_file_name, '.set')
         EEG = pop_fileio([source_directory, source_file_name]);
     else
         EEG = pop_loadset('filename', source_file_name, 'filepath', source_directory);
-    end;
+    end
     
-    %EEG = pop_fileio([source_directory, source_file_name]);
     EEG = eeg_checkset( EEG );
 
     % extract epochs with selected channel
@@ -27,20 +26,24 @@ function [averages, EEG] = eeglab_process(source_directory, source_file_name, pa
     EEG = eeg_checkset( EEG );
 
     % remove baseline
-    EEG = pop_rmbase( EEG, [param.preepoch * param.Fs    0]);
+    EEG = pop_rmbase( EEG, [param.preepoch * 1000    0]);
     EEG = eeg_checkset( EEG );
-
-    % low-pass-filter the data 
-    %EEG = pop_eegfilt( EEG, 0, max_fq);
-    %EEG = eeg_checkset( EEG );
-    %EEG = pop_eegfilt( EEG, min_fq, 0, (postepoch - preepoch) * Fs / 4);
-    %EEG = pop_eegfilt( EEG, 0.01, 12, 16);
-    %EEG = eeg_checkset( EEG );
     
-    % downsample the data
-%    [EEG] = pop_resample( EEG, param.Fsnew);
-    
-    % ensamble epoch averaging if requested
+   
+    % prepare data for single trial analysis 1)
+    EEG_data_singletrial = squeeze(EEG.data(param.channels, :, :))';
+    % prepare data for single trial analysis 2)
+    % truly remove the baseline preepoch period from the signal
+    if param.preepoch < 0
+        EEG_out = zeros(size(EEG_data_singletrial, 1), size(EEG_data_singletrial, 2) + param.preepoch * param.Fs);
+        for i = 1:size(EEG_data_singletrial, 1)
+            EEG_out(i, :) = EEG_data_singletrial(i, -param.preepoch * param.Fs + 1:end);
+        end
+    else
+        EEG_out = EEG_data_singletrial;
+    end
+  
+    % ensemble epoch averaging if requested
     if (param.avg.(phase) > 1)
         EEG_data = eeglab_averaging(EEG.data, param.avg.(phase));
     else

@@ -12,7 +12,7 @@ function [bestmodels, global_results, results, param] = runTraining(train_dirs, 
         
     % extract all training feature vectors
     for I = 1:length(train_dirs)
-        [out_featuresnew, out_targetsnew] = create_feature_vector(train_dirs{I}, train_files{I}, param, 'training'); % training trials
+        [out_featuresnew, out_targetsnew, param] = create_feature_vector(train_dirs{I}, train_files{I}, param, 'training'); % training trials
         
         if (exist('out_features', 'var') && exist('out_targets', 'var')) 
             out_features = vertcat(out_features, out_featuresnew);
