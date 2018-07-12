@@ -85,8 +85,45 @@ for j = 1:length(param.classifiers)
     disp(str);
 end
     
+
+
+% print single trial measures
+fields = fieldnames(param.stanalysis);
+for fn=fields'
+  str = sprintf('\nFilename: %s', fn{1});
+  disp(str);
+  
+  %# since fn is a 1-by-1 cell array, you still need to index into it, unfortunately
+  t_st_ampl_mean = mean(param.stanalysis.(fn{1}).amplitudesT);
+  t_st_ampl_std = std(param.stanalysis.(fn{1}).amplitudesT);
+  t_avg_ampl = param.stanalysis.(fn{1}).avgAmplitudeT;
+  
+  n_st_ampl_mean = mean(param.stanalysis.(fn{1}).amplitudesN);
+  n_st_ampl_std = std(param.stanalysis.(fn{1}).amplitudesN);
+  n_avg_ampl = param.stanalysis.(fn{1}).avgAmplitudeN;
+  
+  t_st_lat_mean = mean(param.stanalysis.(fn{1}).latenciesT);
+  t_st_lat_std = std(param.stanalysis.(fn{1}).latenciesT);
+  t_avg_lat = param.stanalysis.(fn{1}).avgLatencyT;
+  
+  n_st_lat_mean = mean(param.stanalysis.(fn{1}).latenciesN);
+  n_st_lat_std = std(param.stanalysis.(fn{1}).latenciesN);
+  n_avg_lat = param.stanalysis.(fn{1}).avgLatencyN;
+  
+  
+  str = sprintf('Target: peak latency %.3f, single trial average %.3f (SD %.3f)', t_avg_lat, t_st_lat_mean, t_st_lat_std);
+  disp(str);
+  str = sprintf('Non-target: peak latency %.3f, single trial average %.3f (SD %.3f)', n_avg_lat, n_st_lat_mean, n_st_lat_std);
+  disp(str);
+  str = sprintf('Target: peak amplitude %.3f, single trial average %.3f (SD %.3f)', t_avg_ampl, t_st_ampl_mean, t_st_ampl_std);
+  disp(str);
+  str = sprintf('Non-target: peak amplitude %.3f, single trial average %.3f (SD %.3f)', n_avg_ampl, n_st_ampl_mean, n_st_ampl_std);
+  disp(str);
+end
+
+
 %plotResults(allresults, averages, param)
 
 % save data to be later evaluated e.g. by Python deep learning
 % libraries, such as Keras
-save('testing.mat', '-v7.3', 'testing_data');
+%save('testing.mat', '-v7.3', 'testing_data');

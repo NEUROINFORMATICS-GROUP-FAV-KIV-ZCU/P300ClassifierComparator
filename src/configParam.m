@@ -123,7 +123,7 @@ function [param] = configParam()
     param.sfam.beta = 1;
     
     % range for finding p300 in single trial analysis
-    param.range = [200, 600]; % in miliseconds
+    param.range = [250, 500]; % in miliseconds
     param.stanalysis = struct;
     
 end

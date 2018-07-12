@@ -12,10 +12,10 @@ function [out_features, out_targets, param] ...
         % and join them into NNToolBox training data
         [targetAverages, singletrialsT] = eeglab_process(source_directory, source_file_name, ...
         param, param.(phase).target_markers, phase);
-        [amplitudesT, latenciesT] = retrieve_single_trial_peaks(singletrialsT, param);
+        [amplitudesT, latenciesT, avgAT, avgLT] = retrieve_single_trial_peaks(singletrialsT, param);
         [nontargetAverages, singletrialsN] = eeglab_process(source_directory, source_file_name, ...
         param, param.(phase).nontarget_markers, phase);
-        [amplitudesN, latenciesN] = retrieve_single_trial_peaks(singletrialsN, param);
+        [amplitudesN, latenciesN, avgAN, avgLN] = retrieve_single_trial_peaks(singletrialsN, param);
         
         % output for single trial analysis
         stanalysis = struct;
@@ -23,6 +23,10 @@ function [out_features, out_targets, param] ...
         stanalysis.amplitudesN = amplitudesN;
         stanalysis.latenciesT  = latenciesT;
         stanalysis.latenciesN  = latenciesN;
+        stanalysis.avgAmplitudeT = avgAT;
+        stanalysis.avgLatencyT   = avgLT;
+        stanalysis.avgAmplitudeN = avgAN;
+        stanalysis.avgLatencyN   = avgLN;
         sname = char(matlab.lang.makeValidName(extractBetween(source_file_name, "_",".")));
         param.stanalysis.(sname) = stanalysis;
         
