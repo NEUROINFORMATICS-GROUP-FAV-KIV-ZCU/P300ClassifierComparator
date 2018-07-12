@@ -7,10 +7,14 @@
 function [amplitudes, latencies, peakamplitude, peaklatency] = retrieve_single_trial_peaks(trials, param)
     amplitudes = zeros(1, size(trials, 1));
     latencies  = zeros(1, size(trials, 1));
+    counter = 0;
     for i = 1:size(trials, 1)
         signalPart = trials(i, param.range(1) * (param.Fs / 1000):param.range(2) * (param.Fs / 1000));
-        [amplitudes(1, i), I] = max(signalPart);
-        latencies(1, i) = param.range(1) + I / (param.Fs / 1000);
+        [amplitude, I] = max(signalPart);
+        
+        counter = counter + 1; 
+        amplitudes(1, counter) = amplitude;
+        latencies(1, counter) = param.range(1) + I / (param.Fs / 1000);
     end
     
     % peak from the signal average

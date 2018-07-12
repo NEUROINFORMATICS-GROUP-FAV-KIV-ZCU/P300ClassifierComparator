@@ -20,6 +20,10 @@ function [averages, EEG_out] = eeglab_process(source_directory, source_file_name
     end
     
     EEG = eeg_checkset( EEG );
+    
+     
+    
+   % EEG = pop_eegfilt( EEG, 0, 12);
 
     % extract epochs with selected channel
     EEG = pop_epoch( EEG, markers, [param.preepoch param.postepoch], 'epochinfo', 'yes');
@@ -29,6 +33,9 @@ function [averages, EEG_out] = eeglab_process(source_directory, source_file_name
     EEG = pop_rmbase( EEG, [param.preepoch * 1000    0]);
     EEG = eeg_checkset( EEG );
     
+    EEG = pop_jointprob(EEG,1,[1:19], 3, 3, 0, 0);
+    EEG = eeg_rejsuperpose( EEG, 1, 1, 1, 1, 1, 1, 1, 1);
+    EEG = pop_rejepoch(EEG,EEG.reject.rejglobal ,0);  
    
     % prepare data for single trial analysis 1)
     EEG_data_singletrial = squeeze(EEG.data(param.channels, :, :))';
